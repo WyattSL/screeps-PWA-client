@@ -155,7 +155,7 @@ koa.use(async(context, next) => {
 			
 				con.addEventListener("touchstart", (e) => {
 					console.log("touchstart",e)
-					if (e.target && e.target.className && e.target.className.includes("map-container")) {
+					if (e.target && (e.target.className && e.target.className.includes("map-container")) || (e.target.nodeName.toLowerCase() == "canvas" && e.target.parentNode && e.target.parentNode.nodeName.toLowerCase() == "app-world-map-map") ) {
 						console.log("pass");
 						//e.preventDefault();
 						//e.stopImmediatePropagation();
@@ -169,14 +169,14 @@ koa.use(async(context, next) => {
 			
 				con.addEventListener("touchmove", (e) => {
 					console.log("touchdrag")
-					if (e.target && e.target.className && e.target.className.includes("map-container")) {
+					if (e.target && (e.target.className && e.target.className.includes("map-container")) || (e.target.nodeName.toLowerCase() == "canvas" && e.target.parentNode && e.target.parentNode.nodeName.toLowerCase() == "app-world-map-map") ) {
 						console.log("pass");
 						e.preventDefault();
 						e.stopImmediatePropagation();
 						let tX = e.touches[0].screenX;
 						let tY = e.touches[0].screenY;
-						let changeX = (tX - touchStart.x) / 175;
-						let changeY = (tY - touchStart.y) / 175;
+						let changeX = (tX - touchStart.x) / 25;
+						let changeY = (tY - touchStart.y) / 25;
 						touchStart.x = tX;
 						touchStart.y = tY;
 						touchStart.changed = true;
@@ -192,7 +192,7 @@ koa.use(async(context, next) => {
 			
 				con.addEventListener("touchend", (e) => {
 					console.log("touchend",e)
-					if (e.target && e.target.className && e.target.className.includes("map-container")) {
+					if (e.target && (e.target.className && e.target.className.includes("map-container")) || (e.target.nodeName.toLowerCase() == "canvas" && e.target.parentNode && e.target.parentNode.nodeName.toLowerCase() == "app-world-map-map") ) {
 						console.log("pass");
 						e.preventDefault();
 						e.stopImmediatePropagation();
@@ -201,8 +201,8 @@ koa.use(async(context, next) => {
 			
 						let tX = e.changedTouches[0].screenX;
 						let tY = e.changedTouches[0].screenY;
-						let changeX = (tX - touchStart.x) / 175;
-						let changeY = (tY - touchStart.y) / 175;
+						let changeX = (tX - touchStart.x) / 25;
+						let changeY = (tY - touchStart.y) / 25;
 						console.log("END!",changeX,changeY)
 						let curX = Number(location.href.split("?pos=")[1].split(",")[0]);
 						let curY = Number(location.href.split(",")[1]);
@@ -224,13 +224,14 @@ koa.use(async(context, next) => {
 			
 				con.addEventListener("touchcancel", (e) => {
 					console.log("touchcancel",e)
-					if (e.target && e.target.className && e.target.className.includes("map-container")) {
+					if (e.target && (e.target.className && e.target.className.includes("map-container")) || (e.target.nodeName.toLowerCase() == "canvas" && e.target.parentNode && e.target.parentNode.nodeName.toLowerCase() == "app-world-map-map") ) {
 						if (e.touches.length >= 1) return;
 						touchDown = false;
 					}
 				}, {passive: true})
 			
 			}, 500);
+			
 			
 
 </script>
@@ -240,6 +241,9 @@ koa.use(async(context, next) => {
 		overflow: hidden;
 	}
 	.map-container {
+		touch-action: none;
+	}
+	canvas {
 		touch-action: none;
 	}
 </style>
