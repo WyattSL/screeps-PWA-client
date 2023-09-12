@@ -140,22 +140,31 @@ koa.use(async(context, next) => {
 				const con = document.body;
 			
 				con.addEventListener("touchstart", (e) => {
-					e.preventDefault();
+					if (e.target && e.target.className && e.target.className.includes("map-container")) {
+						e.preventDefault();
+					}
 				})
 			
 				con.addEventListener("touchdrag", (e) => {
-					e.preventDefault();
+					if (e.target && e.target.className && e.target.className.includes("map-container")) {
+						e.preventDefault();
+					}
 				})
 			
 				con.addEventListener("touchend", (e) => {
-					e.preventDefault();
+					if (e.target && e.target.className && e.target.className.includes("map-container")) {
+						e.preventDefault();
+					}
 				})
 			
 				con.addEventListener("touchcancel", (e) => {
-					e.preventDefault();
+					if (e.target && e.target.className && e.target.className.includes("map-container")) {
+						e.preventDefault();
+					}
 				})
 			
 			}, 500);
+			
 			
 			
 			
