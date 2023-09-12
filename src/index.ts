@@ -129,8 +129,8 @@ koa.use(async(context, next) => {
 	// Rewrite various payloads
 	context.body = await async function() {
 		let body = await file.async('text');
-		body = body.replace(/http:\/\/ezra.wyatt.dom/g, `https://ezra.wyatt.world`);
-		body = body.replace(/ezra.wyatt.dom/g, `ezra.wyatt.world`);
+		body = body.replace(/http:\/\/ezra.wyatt.dom/g, `https://screeps.wyatt.world`);
+		body = body.replace(/ezra.wyatt.dom/g, `screeps.wyatt.world`);
 		if (path === 'index.html') {
 			// Inject startup shim
 			const header = '<title>Screeps</title>';
@@ -213,8 +213,8 @@ addEventListener('message', event => {
 			body = body.replace(/<script[^>]*>[^>]*mxpnl[^>]*<\/script>/g, '<script>mixpanel = new Proxy(() => mixpanel, { get: () => mixpanel })</script>');
 			body = body.replace(/<script[^>]*>[^>]*twttr[^>]*<\/script>/g, '<script>twttr = new Proxy(() => twttr, { get: () => twttr })</script>');
 			body = body.replace(/<script[^>]*>[^>]*onRecaptchaLoad[^>]*<\/script>/g, '<script>function onRecaptchaLoad(){}</script>');
-			body = body.replace(/http:\/\/ezra.wyatt.dom/g, `https://ezra.wyatt.world`);
-			body = body.replace(/ezra.wyatt.dom/g, `ezra.wyatt.world`);
+			body = body.replace(/http:\/\/ezra.wyatt.dom/g, `https://screeps.wyatt.world`);
+			body = body.replace(/ezra.wyatt.dom/g, `screeps.wyatt.world`);
 			return body;
 		} else if (path === 'config.js') {
 			const api = argv.backend ? '/api/' : `/(${info.backend})/api/`;
@@ -275,7 +275,7 @@ addEventListener('message', event => {
 					text = text.replace(/https:\/\/d3os7yery2usni\.cloudfront\.net\//g, `${info.backend}/assets/`);
 				}
 			}
-			//text = text.replace(/http(s)?:\/\/ezra\.wyatt\.dom/g, `https://ezra.wyatt.world`);
+			//text = text.replace(/http(s)?:\/\/ezra\.wyatt\.dom/g, `https://screeps.wyatt.world`);
 			return beautify ? jsBeautify(text) : text;
 
 		} else {
