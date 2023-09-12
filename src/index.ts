@@ -167,15 +167,18 @@ koa.use(async(context, next) => {
 						e.preventDefault();
 						let tX = e.touches[0].screenX;
 						let tY = e.touches[0].screenY;
-						let changeX = (tX - touchStart.x) / 10;
-						let changeY = (tY - touchStart.y) / 10;
+						let changeX = (tX - touchStart.x) / 25;
+						let changeY = (tY - touchStart.y) / 25;
 						touchStart.x = tX;
 						touchStart.y = tY;
 						touchStart.changed = true;
 						console.log("DRAG!",changeX,changeY)
 						let curX = Number(location.href.split("?pos=")[1].split(",")[0]);
 						let curY = Number(location.href.split(",")[1]);
-						location.href = location.href.split("?")[0] + "?pos=" + (curX - changeX) + "," + (curY - changeY);
+						
+						let newX = Math.max(Math.min((curX - changeX), 10), -10);
+						let newY = Math.max(Math.min((curY - changeY), 10), -10);
+						location.href = location.href.split("?")[0] + "?pos=" + newX + "," + newY;
 					}
 				})
 			
@@ -189,12 +192,15 @@ koa.use(async(context, next) => {
 			
 						let tX = e.changedTouches[0].screenX;
 						let tY = e.changedTouches[0].screenY;
-						let changeX = (tX - touchStart.x) / 10;
-						let changeY = (tY - touchStart.y) / 10;
+						let changeX = (tX - touchStart.x) / 25;
+						let changeY = (tY - touchStart.y) / 25;
 						console.log("END!",changeX,changeY)
 						let curX = Number(location.href.split("?pos=")[1].split(",")[0]);
 						let curY = Number(location.href.split(",")[1]);
-						location.href = location.href.split("?")[0] + "?pos=" + (curX - changeX) + "," + (curY - changeY);
+			
+						let newX = Math.max(Math.min((curX - changeX), 10), -10);
+						let newY = Math.max(Math.min((curY - changeY), 10), -10);
+						location.href = location.href.split("?")[0] + "?pos=" + newX + "," + newY;
 			
 						touchDown = false;
 						let tE = {x: e.changedTouches[0].screenX, y: e.changedTouches[0].screenY}
@@ -219,6 +225,7 @@ koa.use(async(context, next) => {
 				})
 			
 			}, 500);
+			
 			
 			
 			
