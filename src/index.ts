@@ -297,6 +297,7 @@ koa.use(async(context, next) => {
 				context.res.setHeader(`Content-Type`, `image/x-icon`);
 				let f = await fs.readFile(`./public/icon.ico`);
 				context.res.end(Buffer.from(f.buffer));
+				return;
 			}
 			proxy.web(context.req, context.res, {
 				target: argv.internal_backend ?? info.backend,
