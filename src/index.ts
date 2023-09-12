@@ -12,12 +12,12 @@ import JSZip from 'jszip';
 import fetch from 'node-fetch';
 
 const Manifest = `
-	{"background_color": "#333333", "name": "Screeps (Wyatt's World)", "icons": [
+	{"background_color": "#333333", "theme_color": "#444444", "name": "Screeps (Wyatt's World)", "icons": [
 		{
 			"src": "icon.ico",
 			"sizes": "16x16"
 		}
-	], "start_url": "https://screeps.wyatt.world", "display": "fullscreen", "short_name": "Screeps WW", "display_override": ["fullscreen", "standalone", "minimal-ui"]}
+	], "start_url": "https://screeps.wyatt.world", "display": "standalone", "short_name": "Screeps WW", "display_override": ["standalone", "fullscreen", "minimal-ui"]}
 `;
 
 // Parse program arguments
