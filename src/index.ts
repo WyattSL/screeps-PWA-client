@@ -11,6 +11,15 @@ import jsBeautify from 'js-beautify';
 import JSZip from 'jszip';
 import fetch from 'node-fetch';
 
+const Manifest = `
+	{"background_color": "#333333", "name": "Screeps (Wyatt's World)", "icons": [
+		{
+			"src": "",
+			"sizes": ""
+		}
+	], "start_url": "/", "display": "fullscreen"}
+`;
+
 // Parse program arguments
 const argv = function() {
 	const parser = new ArgumentParser;
@@ -118,8 +127,7 @@ koa.use(async(context, next) => {
 	}
 
 	// Rewrite various payloads
-	context.body = await async function() {
-		if (path === 'index.html') {
+	context.body = await async function() {if (path === 'index.html') {
 			let body = await file.async('text');
 			// Inject startup shim
 			const header = '<title>Screeps</title>';
@@ -279,6 +287,14 @@ koa.use(async(context, next) => {
 			if (info.endpoint.startsWith("/api/auth")) {
 				const returnUrl = encodeURIComponent(info.backend);
 				context.req.url = `${info.endpoint}${info.endpoint.includes('?') ? '&' : '?'}returnUrl=${returnUrl}`;
+			} else if (info.endpoint.startsWith(`/manifest.json`)) {
+				context.respond = false;
+				context.res.setHeader(`Content-Type`, `application/json`);
+				context.res.end(Manifest);
+			} else if (info.endpoint.startsWith(`/icon`)) {
+				context.respond = false;
+				context.res.setHeader(`Content-Type`, `image/x-icon`);
+				context.res.end(`data:image/x-icon;base64,AAABAAEAEBAAAAEAIABoBAAAFgAAACgAAAAQAAAAIAAAAAEAIAAAAAAAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABh/////wAAAGEAAABhAAAAYQAAAGEAAABhAAAAYf////8AAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABh//////////8AAABhAAAAYf//////////AAAAYQAAAGH//////////wAAAGEAAABhAAAAYQAAAGEAAABh//////////8AAABhAAAAYf////8AAABhAAAAYf////8AAABhAAAAYf//////////AAAAYQAAAGEAAABh//////////8AAABhAAAAYQAAAGEAAABhAAAAYQAAAGH/////AAAAYQAAAGEAAABh//////////8AAABh//////////8AAABhAAAAYQAAAGEAAABhAAAAYf//////////AAAAYQAAAGEAAABhAAAAYQAAAGH/////////////////////AAAAYQAAAGEAAABhAAAAYf////8AAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABh//////////8AAABh//////////8AAABhAAAAYQAAAGH/////AAAAYQAAAGH/////AAAAYQAAAGEAAABh//////////8AAABhAAAAYQAAAGH//////////wAAAGEAAABhAAAAYf//////////AAAAYQAAAGEAAABh//////////8AAABhAAAAYQAAAGEAAABhAAAAYf//////////AAAAYQAAAGEAAABhAAAAYQAAAGEAAABh//////////8AAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABh/////wAAAGEAAABhAAAAYQAAAGEAAABhAAAAYf////8AAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABhAAAAYQAAAGEAAABh//8AAP//AAD//wAA9+8AAOZnAADNswAAn7kAAD58AAA9/AAAnbkAAM5zAADn5wAA9+8AAP//AAD//wAA//8AAA==`);
 			}
 			proxy.web(context.req, context.res, {
 				target: argv.internal_backend ?? info.backend,
