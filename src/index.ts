@@ -203,6 +203,15 @@ addEventListener('message', event => {
 		} else if (context.path.endsWith('.js')) {
 			let text = await file.async('text');
 			if (path === 'build.min.js') {
+				// Fix map loading. This might be a PR, or might be something I broke. Who knows?!
+				if (argv.backend != argv.internal_backend) {
+					while (argv.body.includes(argv.internal_backend.split(":")[0])) {
+						argv.body = context.body.replace(argv.internal_backend, argv.backend);
+						argv.body = context.body.replace(argv.internal_backend.split(":")[0], argv.backend);
+					}
+				}
+
+
 				// Load backend info from underlying server
 				const backend = new URL(info.backend);
 				const version = await async function() {
