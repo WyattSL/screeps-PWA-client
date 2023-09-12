@@ -325,7 +325,7 @@ koa.use(async(context, next) => {
 				context.res.end(Buffer.from(f.buffer));
 				*/
 				//context.req.url = `https://raw.githubusercontent.com/WyattSL/screeps-steamless-client/main/public/icon.ico`;
-				context.req.url = `/WyattSL/screeps-steamless-client/main/public/${info.endpoint.split("/").pop()}`;
+				context.req.url = `/WyattSL/screeps-steamless-client/${context.req.url.includes("dev") ? "dev" : "main"}/public/${info.endpoint.split("/").pop()}`;
 				proxy.web(context.req, context.res, {
 					target: `https://raw.githubusercontent.com`
 				})
