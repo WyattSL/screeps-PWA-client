@@ -142,6 +142,7 @@ koa.use(async(context, next) => {
 				// Stop PWA scrolling
 				window.addEventListener("scroll", (e) => {
 					e.preventDefault();
+					e.stopImmediatePropagation();
 					window.scrollTo(0, 0);
 				})
 			
@@ -153,6 +154,7 @@ koa.use(async(context, next) => {
 					if (e.target && e.target.className && e.target.className.includes("map-container")) {
 						console.log("pass");
 						e.preventDefault();
+						e.stopImmediatePropagation();
 						if (e.touches.length > 1) return;
 						console.log("pass2");
 						touchDown = true;
@@ -161,10 +163,11 @@ koa.use(async(context, next) => {
 				})
 			
 				con.addEventListener("touchdrag", (e) => {
-					console.log("touchdrag",e)
+					console.log("touchdrag")
 					if (e.target && e.target.className && e.target.className.includes("map-container")) {
 						console.log("pass");
 						e.preventDefault();
+						e.stopImmediatePropagation();
 						let tX = e.touches[0].screenX;
 						let tY = e.touches[0].screenY;
 						let changeX = (tX - touchStart.x) / 25;
@@ -187,6 +190,7 @@ koa.use(async(context, next) => {
 					if (e.target && e.target.className && e.target.className.includes("map-container")) {
 						console.log("pass");
 						e.preventDefault();
+						e.stopImmediatePropagation();
 						if (e.touches.length >= 1) return;
 						console.log("pass2");
 			
@@ -225,6 +229,9 @@ koa.use(async(context, next) => {
 				})
 			
 			}, 500);
+			
+			
+			
 			
 			
 			
