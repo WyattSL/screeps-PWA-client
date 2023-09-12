@@ -238,7 +238,7 @@ addEventListener('message', event => {
 				}
 				if (new URL(info.backend).hostname !== 'screeps.com') {
 					// Replace official CDN with local assets
-					text = text.replace(/https:\/\/d3os7yery2usni\.cloudfront\.net\//g, `${info.backend}/assets/`);
+					text = text.replace(/https:\/\/d3os7yery2usni\.cloudfront\.net\//g, `${argv.backend}/assets/`);
 				}
 			}
 			return beautify ? jsBeautify(text) : text;
