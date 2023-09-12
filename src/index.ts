@@ -145,8 +145,8 @@ koa.use(async(context, next) => {
 			
 				// Stop PWA scrolling
 				window.addEventListener("scroll", (e) => {
-					e.preventDefault();
-					e.stopImmediatePropagation();
+					document.body.scrollTop = 0;
+					document.body.scrollLeft = 0;
 					window.scrollTo(0, 0);
 				})
 			
@@ -233,6 +233,7 @@ koa.use(async(context, next) => {
 				})
 			
 			}, 500);
+			
 			
 			
 			
