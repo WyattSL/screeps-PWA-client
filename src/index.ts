@@ -251,7 +251,12 @@ koa.use(async(context, next) => {
 			
 
 </script>
-
+<style>
+    body !important {
+		max-height: 99%;
+		overflow: hidden;
+	}
+</style>
 <script>
 if (localStorage.backendDomain && localStorage.backendDomain !== ${JSON.stringify(info.backend)}) {
 	Object.keys(localStorage, key => delete localStorage[key]);
