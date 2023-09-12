@@ -134,7 +134,7 @@ koa.use(async(context, next) => {
 			body = body.replace(header, `<script>
 
 			setTimeout(() => {
-				const con = document.getElementsByClassName("map-container")[0];
+				const con = document.body;
 			
 				con.addEventListener("touchstart", (e) => {
 					e.preventDefault();
@@ -153,6 +153,7 @@ koa.use(async(context, next) => {
 				})
 			
 			}, 500);
+			
 			
 			
 			

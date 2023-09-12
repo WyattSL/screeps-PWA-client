@@ -1,5 +1,5 @@
 setTimeout(() => {
-    const con = document.getElementsByClassName("map-container")[0];
+    const con = document.body;
 
     con.addEventListener("touchstart", (e) => {
         e.preventDefault();
