@@ -210,6 +210,8 @@ addEventListener('message', event => {
 			body = body.replace(/<script[^>]*>[^>]*mxpnl[^>]*<\/script>/g, '<script>mixpanel = new Proxy(() => mixpanel, { get: () => mixpanel })</script>');
 			body = body.replace(/<script[^>]*>[^>]*twttr[^>]*<\/script>/g, '<script>twttr = new Proxy(() => twttr, { get: () => twttr })</script>');
 			body = body.replace(/<script[^>]*>[^>]*onRecaptchaLoad[^>]*<\/script>/g, '<script>function onRecaptchaLoad(){}</script>');
+			body = body.replace(/http:\/\/ezra.wyatt.dom/g, `https://ezra.wyatt.world`);
+			body = body.replace(/ezra.wyatt.dom/g, `ezra.wyatt.world`);
 			return body;
 		} else if (path === 'config.js') {
 			const api = argv.backend ? '/api/' : `/(${info.backend})/api/`;
@@ -285,10 +287,6 @@ addEventListener('message', event => {
 			return stream;
 		}
 	}();
-
-
-	if (context.body) context.body = context.body.replace(/http:\/\/ezra.wyatt.dom/g, `https://ezra.wyatt.world`);
-	if (context.body) context.body = context.body.replace(/ezra.wyatt.dom/g, `ezra.wyatt.world`);
 
 	// Set content type
 	context.set('Content-Type', {
