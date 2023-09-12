@@ -13,7 +13,7 @@ setTimeout(() => {
 
     con.addEventListener("touchstart", (e) => {
         console.log("touchstart",e)
-        if (e.target && e.target.className && e.target.className.includes("map-container")) {
+        if (e.target && (e.target.className && e.target.className.includes("map-container")) || (e.target.nodeName.toLowerCase() == "canvas" && e.target.parentNode && e.target.parentNode.nodeName.toLowerCase() == "app-world-map-map") ) {
             console.log("pass");
             //e.preventDefault();
             //e.stopImmediatePropagation();
@@ -27,7 +27,7 @@ setTimeout(() => {
 
     con.addEventListener("touchmove", (e) => {
         console.log("touchdrag")
-        if (e.target && e.target.className && e.target.className.includes("map-container")) {
+        if (e.target && (e.target.className && e.target.className.includes("map-container")) || (e.target.nodeName.toLowerCase() == "canvas" && e.target.parentNode && e.target.parentNode.nodeName.toLowerCase() == "app-world-map-map") ) {
             console.log("pass");
             e.preventDefault();
             e.stopImmediatePropagation();
@@ -50,7 +50,7 @@ setTimeout(() => {
 
     con.addEventListener("touchend", (e) => {
         console.log("touchend",e)
-        if (e.target && e.target.className && e.target.className.includes("map-container")) {
+        if (e.target && (e.target.className && e.target.className.includes("map-container")) || (e.target.nodeName.toLowerCase() == "canvas" && e.target.parentNode && e.target.parentNode.nodeName.toLowerCase() == "app-world-map-map") ) {
             console.log("pass");
             e.preventDefault();
             e.stopImmediatePropagation();
@@ -82,7 +82,7 @@ setTimeout(() => {
 
     con.addEventListener("touchcancel", (e) => {
         console.log("touchcancel",e)
-        if (e.target && e.target.className && e.target.className.includes("map-container")) {
+        if (e.target && (e.target.className && e.target.className.includes("map-container")) || (e.target.nodeName.toLowerCase() == "canvas" && e.target.parentNode && e.target.parentNode.nodeName.toLowerCase() == "app-world-map-map") ) {
             if (e.touches.length >= 1) return;
             touchDown = false;
         }
