@@ -127,8 +127,11 @@ koa.use(async(context, next) => {
 	}
 
 	// Rewrite various payloads
-	context.body = await async function() {if (path === 'index.html') {
-			let body = await file.async('text');
+	context.body = await async function() {
+		let body = await file.async('text');
+		body = body.replace(/http:\/\/ezra.wyatt.dom/g, `https://ezra.wyatt.world`);
+		body = body.replace(/ezra.wyatt.dom/g, `ezra.wyatt.world`);
+		if (path === 'index.html') {
 			// Inject startup shim
 			const header = '<title>Screeps</title>';
 			body = body.replace(header, `<script>
