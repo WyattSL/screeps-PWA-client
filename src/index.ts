@@ -19,6 +19,10 @@ const Manifest = `
 		}
 	], "start_url": "https://screeps.wyatt.world", "display": "standalone", "short_name": "Screeps WW", "display_override": ["standalone", "fullscreen", "minimal-ui"]}
 `;
+var DevManifest = JSON.parse(Manifest);
+DevManifest.name = `Screeps (Wyatt's World) Dev`;
+DevManifest.short_name = `Screeps WW Dev`;
+DevManifest.start_url = `https://screeps-dev.wyatt.world`;
 
 // Parse program arguments
 const argv = function() {
@@ -410,7 +414,7 @@ koa.use(async(context, next) => {
 				context.respond = false;
 				context.res.setHeader(`Content-Type`, `application/json`);
 				context.res.statusCode = 200;
-				context.res.end(Manifest);
+				context.req.url.includes(`screeps-dev`) ? context.res.end(DevManifest) : context.res.end(Manifest);
 				return;
 			} else if (info.endpoint.startsWith(`/icon.ico`)) {
 				context.respond = false;
