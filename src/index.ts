@@ -315,9 +315,10 @@ koa.use(async(context, next) => {
 				context.respond = false;
 				context.res.setHeader(`Content-Type`, `application/json`);
 				context.res.statusCode = 200;
-				context.req.url.includes(`screeps-dev`) ? context.res.end(DevManifest) : context.res.end(Manifest);
+				context.req.url.includes(`screeps-dev`)  ? context.res.end(DevManifest) : context.res.end(Manifest);
 				return;
 			} else if (info.endpoint.startsWith(`/icon.ico`) || info.endpoint.startsWith(`/patches.js`)) {
+				console.log(`Detected!`);
 				context.respond = false;
 				/*
 				context.res.setHeader(`Content-Type`, `image/x-icon`);
@@ -325,7 +326,8 @@ koa.use(async(context, next) => {
 				context.res.end(Buffer.from(f.buffer));
 				*/
 				//context.req.url = `https://raw.githubusercontent.com/WyattSL/screeps-steamless-client/main/public/icon.ico`;
-				context.req.url = `/WyattSL/screeps-steamless-client/${context.req.url.includes("dev") ? "dev" : "main"}/public/${info.endpoint.split("/").pop()}`;
+				context.req.url = `/WyattSL/screeps-steamless-client/${context.req.url.includes("screeps-dev") || context.req.url.includes("localhost") ? "dev" : "main"}/public${info.endpoint}`;
+				console.log(context.req.url);
 				proxy.web(context.req, context.res, {
 					target: `https://raw.githubusercontent.com`
 				})
