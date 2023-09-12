@@ -178,7 +178,7 @@ koa.use(async(context, next) => {
 						e.preventDefault();
 						if (e.touches.length >= 1) return;
 						touchDown = false;
-						let tE = {x: e.touches[0].screenX, y: e.touches[0].screenY}
+						let tE = {x: e.changedTouches[0].screenX, y: e.changedTouches[0].screenY}
 						if (touchStart.dragged) return;
 						let dist = Math.sqrt(((tE.y-touchStart.y)**2) + ((tE.x-touchStart.x)**2));
 						if (dist < 7) {
@@ -197,6 +197,7 @@ koa.use(async(context, next) => {
 				})
 			
 			}, 500);
+			
 			
 			
 			
