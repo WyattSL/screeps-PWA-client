@@ -203,6 +203,7 @@ addEventListener('message', event => {
 		} else if (context.path.endsWith('.js')) {
 			let text = await file.async('text');
 			if (path === 'build.min.js') {
+				console.log(`build.min.js`, info);
 				// Load backend info from underlying server
 				const backend = new URL(info.backend);
 				const version = await async function() {
@@ -226,8 +227,8 @@ addEventListener('message', event => {
 								if (payload.includes('apiUrl')) {
 									// Inject `host`, `port`, and `official`
 									text = `${text.substr(0, ii)},
-										host: ${JSON.stringify(backend.hostname == argv.internal_backend.split(":")[0] ? argv.backend.split(":")[0] : backend.hostname)},
-										port: ${(backend.hostname == argv.internal_backend.split(":")[0] ? (argv.backend.split(":").length > 0 ? argv.backend.split(":")[1] : 443) : backend.port) || '80'},
+										host: ${JSON.stringify(backend.hostname)},
+										port: ${backend.port || '80'},
 										official: ${official},
 									} ${text.substr(ii + 1)}`;
 								}
