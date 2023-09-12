@@ -24,7 +24,7 @@ setTimeout(() => {
         }
     })
 
-    con.addEventListener("touchdrag", (e) => {
+    con.addEventListener("touchmove", (e) => {
         console.log("touchdrag")
         if (e.target && e.target.className && e.target.className.includes("map-container")) {
             console.log("pass");
@@ -32,8 +32,8 @@ setTimeout(() => {
             e.stopImmediatePropagation();
             let tX = e.touches[0].screenX;
             let tY = e.touches[0].screenY;
-            let changeX = (tX - touchStart.x) / 25;
-            let changeY = (tY - touchStart.y) / 25;
+            let changeX = (tX - touchStart.x) / 250;
+            let changeY = (tY - touchStart.y) / 250;
             touchStart.x = tX;
             touchStart.y = tY;
             touchStart.changed = true;
@@ -58,8 +58,8 @@ setTimeout(() => {
 
             let tX = e.changedTouches[0].screenX;
             let tY = e.changedTouches[0].screenY;
-            let changeX = (tX - touchStart.x) / 25;
-            let changeY = (tY - touchStart.y) / 25;
+            let changeX = (tX - touchStart.x) / 250;
+            let changeY = (tY - touchStart.y) / 250;
             console.log("END!",changeX,changeY)
             let curX = Number(location.href.split("?pos=")[1].split(",")[0]);
             let curY = Number(location.href.split(",")[1]);
