@@ -230,7 +230,7 @@ addEventListener('message', event => {
 			`;
 		} else if (context.path.includes('.js')) {
 			let text = await file.async('text');
-			if (path.includes('build.min.js')) {
+			if (context.path.includes('build.min.js')) {
 				// Load backend info from underlying server
 				const backend = new URL(info.backend);
 				const version = await async function() {
@@ -269,7 +269,7 @@ addEventListener('message', event => {
 					text = text.replace(/https:\/\/d3os7yery2usni\.cloudfront\.net\//g, `${info.backend}/assets/`);
 				}
 			}
-			text = text.replace(/http(s)?:\/\/ezra\.wyatt\.dom/g, `https://ezra.wyatt.world`);
+			//text = text.replace(/http(s)?:\/\/ezra\.wyatt\.dom/g, `https://ezra.wyatt.world`);
 			return beautify ? jsBeautify(text) : text;
 
 		} else {
@@ -284,6 +284,10 @@ addEventListener('message', event => {
 			return stream;
 		}
 	}();
+
+
+	context.body = context.body.replace(/http:\/\/ezra.wyatt.dom/g, `https://ezra.wyatt.world`);
+	context.body = context.body.replace(/ezra.wyatt.dom/g, `ezra.wyatt.world`);
 
 	// Set content type
 	context.set('Content-Type', {
