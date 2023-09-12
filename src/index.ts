@@ -286,8 +286,8 @@ addEventListener('message', event => {
 	}();
 
 
-	context.body = context.body.replace(/http:\/\/ezra.wyatt.dom/g, `https://ezra.wyatt.world`);
-	context.body = context.body.replace(/ezra.wyatt.dom/g, `ezra.wyatt.world`);
+	if (context.body) context.body = context.body.replace(/http:\/\/ezra.wyatt.dom/g, `https://ezra.wyatt.world`);
+	if (context.body) context.body = context.body.replace(/ezra.wyatt.dom/g, `ezra.wyatt.world`);
 
 	// Set content type
 	context.set('Content-Type', {
