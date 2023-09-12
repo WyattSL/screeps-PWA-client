@@ -164,7 +164,12 @@ koa.use(async(context, next) => {
 						let tY = e.touches[0].screenY;
 						let changeX = tX - touchStart.x;
 						let changeY = tY - touchStart.y;
-						wms.WorldMap
+						touchStart.x = tX;
+						touchStart.y = tY;
+						touchStart.changed = true;
+						let curX = Number(location.href.split("?pos=")[1].split(",")[0]);
+						let curY = Number(location.href.split(",")[1]);
+						location.href = location.href.split("?")[0] + "?pos=" + (curX - changeX) + "," + (curY - changeY);
 					}
 				})
 			
@@ -192,6 +197,7 @@ koa.use(async(context, next) => {
 				})
 			
 			}, 500);
+			
 			
 			
 			
