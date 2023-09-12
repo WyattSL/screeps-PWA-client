@@ -157,14 +157,15 @@ koa.use(async(context, next) => {
 					console.log("touchstart",e)
 					if (e.target && e.target.className && e.target.className.includes("map-container")) {
 						console.log("pass");
-						e.preventDefault();
-						e.stopImmediatePropagation();
+						//e.preventDefault();
+						//e.stopImmediatePropagation();
+						// man touchMove won't fire if I fire these?!
 						if (e.touches.length > 1) return;
 						console.log("pass2");
 						touchDown = true;
 						touchStart = {x: e.touches[0].screenX, y: e.touches[0].screenY, dragged: false}
 					}
-				})
+				}, {passive: true})
 			
 				con.addEventListener("touchmove", (e) => {
 					console.log("touchdrag")
@@ -187,7 +188,7 @@ koa.use(async(context, next) => {
 						let newY = Math.max(Math.min((curY - changeY), 10), -10);
 						location.href = location.href.split("?")[0] + "?pos=" + newX + "," + newY;
 					}
-				})
+				}, {passive: false})
 			
 				con.addEventListener("touchend", (e) => {
 					console.log("touchend",e)
@@ -219,42 +220,26 @@ koa.use(async(context, next) => {
 							wms.WorldMap.goToRoom(e);
 						}
 					}
-				})
+				}, {passive: false})
 			
 				con.addEventListener("touchcancel", (e) => {
 					console.log("touchcancel",e)
 					if (e.target && e.target.className && e.target.className.includes("map-container")) {
-						console.log("pass");
-						e.preventDefault();
 						if (e.touches.length >= 1) return;
-						console.log("pass2");
 						touchDown = false;
 					}
-				})
+				}, {passive: true})
 			
 			}, 500);
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
 
 </script>
 <style>
     body !important {
 		max-height: 99%;
 		overflow: hidden;
+	}
+	.map-container {
+		touch-action: none;
 	}
 </style>
 <script>
