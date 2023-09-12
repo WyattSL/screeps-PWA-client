@@ -1,21 +1,32 @@
 {
 	"version": "2.0.0",
-	"tasks": [ {
-		"type": "npm",
-		"script": "watch",
-		"group": {
-			"kind": "build",
-			"isDefault": true
+	"tasks": [
+		{
+			"type": "npm",
+			"script": "watch",
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			},
+			"label": "build",
+			"runOptions": {
+				"runOn": "folderOpen"
+			},
+			"isBackground": true,
+			"problemMatcher": [
+				"$tsc-watch"
+			],
+			"presentation": {
+				"reveal": "always",
+				"focus": false,
+				"panel": "shared"
+			}
 		},
-		"label": "build",
-
-		"runOptions": { "runOn": "folderOpen" },
-		"isBackground": true,
-		"problemMatcher": [ "$tsc-watch" ],
-		"presentation": {
-			"reveal": "always",
-			"focus": false,
-			"panel": "shared"
-		},
-	} ]
+		{
+			"command": "./upload.bat",
+			"args": [],
+			"label": "Deploy Code",
+			"problemMatcher": []
+		}
+	],
 }

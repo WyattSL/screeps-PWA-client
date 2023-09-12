@@ -19,6 +19,10 @@ const Manifest = `
 		}
 	], "start_url": "https://screeps.wyatt.world", "display": "standalone", "short_name": "Screeps WW", "display_override": ["standalone", "fullscreen", "minimal-ui"]}
 `;
+var DevManifest = JSON.parse(Manifest);
+DevManifest.name = `Screeps (Wyatt's World) Dev`;
+DevManifest.short_name = `Screeps WW Dev`;
+DevManifest.start_url = `https://screeps-dev.wyatt.world`;
 
 // Parse program arguments
 const argv = function() {
@@ -134,118 +138,20 @@ koa.use(async(context, next) => {
 		if (path === 'index.html') {
 			// Inject startup shim
 			const header = '<title>Screeps</title>';
-			body = body.replace(header, `<script>
-
-			setTimeout(() => {
-				const con = document.body;
-			
-				// Stop PWA scrolling
-				window.addEventListener("scroll", (e) => {
-					e.preventDefault();
-					e.stopImmediatePropagation();
-					window.scrollTo(0, 0);
-				})
-			
-				let touchDown = false;
-				let touchStart = {};
-			
-				con.addEventListener("touchstart", (e) => {
-					console.log("touchstart",e)
-					if (e.target && e.target.className && e.target.className.includes("map-container")) {
-						console.log("pass");
-						e.preventDefault();
-						e.stopImmediatePropagation();
-						if (e.touches.length > 1) return;
-						console.log("pass2");
-						touchDown = true;
-						touchStart = {x: e.touches[0].screenX, y: e.touches[0].screenY, dragged: false}
-					}
-				})
-			
-				con.addEventListener("touchdrag", (e) => {
-					console.log("touchdrag")
-					if (e.target && e.target.className && e.target.className.includes("map-container")) {
-						console.log("pass");
-						e.preventDefault();
-						e.stopImmediatePropagation();
-						let tX = e.touches[0].screenX;
-						let tY = e.touches[0].screenY;
-						let changeX = (tX - touchStart.x) / 25;
-						let changeY = (tY - touchStart.y) / 25;
-						touchStart.x = tX;
-						touchStart.y = tY;
-						touchStart.changed = true;
-						console.log("DRAG!",changeX,changeY)
-						let curX = Number(location.href.split("?pos=")[1].split(",")[0]);
-						let curY = Number(location.href.split(",")[1]);
-						
-						let newX = Math.max(Math.min((curX - changeX), 10), -10);
-						let newY = Math.max(Math.min((curY - changeY), 10), -10);
-						location.href = location.href.split("?")[0] + "?pos=" + newX + "," + newY;
-					}
-				})
-			
-				con.addEventListener("touchend", (e) => {
-					console.log("touchend",e)
-					if (e.target && e.target.className && e.target.className.includes("map-container")) {
-						console.log("pass");
-						e.preventDefault();
-						e.stopImmediatePropagation();
-						if (e.touches.length >= 1) return;
-						console.log("pass2");
-			
-						let tX = e.changedTouches[0].screenX;
-						let tY = e.changedTouches[0].screenY;
-						let changeX = (tX - touchStart.x) / 25;
-						let changeY = (tY - touchStart.y) / 25;
-						console.log("END!",changeX,changeY)
-						let curX = Number(location.href.split("?pos=")[1].split(",")[0]);
-						let curY = Number(location.href.split(",")[1]);
-			
-						let newX = Math.max(Math.min((curX - changeX), 10), -10);
-						let newY = Math.max(Math.min((curY - changeY), 10), -10);
-						location.href = location.href.split("?")[0] + "?pos=" + newX + "," + newY;
-			
-						touchDown = false;
-						let tE = {x: e.changedTouches[0].screenX, y: e.changedTouches[0].screenY}
-						if (touchStart.dragged) return;
-						let dist = Math.sqrt(((tE.y-touchStart.y)**2) + ((tE.x-touchStart.x)**2));
-						if (dist < 7) {
-							let wms = angular.element(document.getElementsByClassName("world-map")[0]).scope();
-							wms.WorldMap.goToRoom(e);
-						}
-					}
-				})
-			
-				con.addEventListener("touchcancel", (e) => {
-					console.log("touchcancel",e)
-					if (e.target && e.target.className && e.target.className.includes("map-container")) {
-						console.log("pass");
-						e.preventDefault();
-						if (e.touches.length >= 1) return;
-						console.log("pass2");
-						touchDown = false;
-					}
-				})
-			
-			}, 500);
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-			
-
-</script>
-
+			body = body.replace(header, `
+<script src="/patches.js" defer></script>
+<style>
+    body !important {
+		max-height: 99%;
+		overflow: hidden;
+	}
+	.map-container {
+		touch-action: none;
+	}
+	canvas {
+		touch-action: none;
+	}
+</style>
 <script>
 if (localStorage.backendDomain && localStorage.backendDomain !== ${JSON.stringify(info.backend)}) {
 	Object.keys(localStorage, key => delete localStorage[key]);
@@ -409,9 +315,10 @@ koa.use(async(context, next) => {
 				context.respond = false;
 				context.res.setHeader(`Content-Type`, `application/json`);
 				context.res.statusCode = 200;
-				context.res.end(Manifest);
+				context.req.url.includes(`screeps-dev`)  ? context.res.end(DevManifest) : context.res.end(Manifest);
 				return;
-			} else if (info.endpoint.startsWith(`/icon.ico`)) {
+			} else if (info.endpoint.startsWith(`/icon.ico`) || info.endpoint.startsWith(`/patches.js`)) {
+				console.log(`Detected!`);
 				context.respond = false;
 				/*
 				context.res.setHeader(`Content-Type`, `image/x-icon`);
@@ -419,7 +326,8 @@ koa.use(async(context, next) => {
 				context.res.end(Buffer.from(f.buffer));
 				*/
 				//context.req.url = `https://raw.githubusercontent.com/WyattSL/screeps-steamless-client/main/public/icon.ico`;
-				context.req.url = `/WyattSL/screeps-steamless-client/main/public/icon.ico`;
+				context.req.url = `/WyattSL/screeps-steamless-client/${context.req.url.includes("screeps-dev") || context.req.url.includes("localhost") ? "dev" : "main"}/public${info.endpoint}`;
+				console.log(context.req.url);
 				proxy.web(context.req, context.res, {
 					target: `https://raw.githubusercontent.com`
 				})
