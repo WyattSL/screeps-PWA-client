@@ -17,7 +17,7 @@ const Manifest = `
 			"src": "icon.ico",
 			"sizes": "16x16"
 		}
-	], "start_url": "/", "display": "fullscreen"}
+	], "start_url": "https://screeps.wyatt.world", "display": "fullscreen", "short_name": "Screeps WW", "display_override": ["fullscreen", "standalone", "minimal-ui"]}
 `;
 
 // Parse program arguments
@@ -131,7 +131,8 @@ koa.use(async(context, next) => {
 			let body = await file.async('text');
 			// Inject startup shim
 			const header = '<title>Screeps</title>';
-			body = body.replace(header, `<script>
+			body = body.replace(header, `<link href="manifest.json" rel="manifest">
+			<script>
 if (localStorage.backendDomain && localStorage.backendDomain !== ${JSON.stringify(info.backend)}) {
 	Object.keys(localStorage, key => delete localStorage[key]);
 }
@@ -294,9 +295,16 @@ koa.use(async(context, next) => {
 				return;
 			} else if (info.endpoint.startsWith(`/icon.ico`)) {
 				context.respond = false;
+				/*
 				context.res.setHeader(`Content-Type`, `image/x-icon`);
 				let f = await fs.readFile(`./public/icon.ico`);
 				context.res.end(Buffer.from(f.buffer));
+				*/
+				//context.req.url = `https://raw.githubusercontent.com/WyattSL/screeps-steamless-client/main/public/icon.ico`;
+				context.req.url = `/WyattSL/screeps-steamless-client/main/public/icon.ico`;
+				proxy.web(context.req, context.res, {
+					target: `https://raw.githubusercontent.com`
+				})
 				return;
 			}
 			proxy.web(context.req, context.res, {
