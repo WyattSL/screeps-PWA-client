@@ -200,10 +200,9 @@ addEventListener('message', event => {
 					XSOLLA_SANDBOX: false,
 				};
 			`;
-		} else if (context.path.endsWith('.js')) {
+		} else if (context.path.includes('.js')) {
 			let text = await file.async('text');
-			if (path === 'build.min.js') {
-				console.log(`build.min.js`, info);
+			if (path.includes('build.min.js')) {
 				// Load backend info from underlying server
 				const backend = new URL(info.backend);
 				const version = await async function() {
