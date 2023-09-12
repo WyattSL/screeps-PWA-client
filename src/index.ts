@@ -138,6 +138,13 @@ koa.use(async(context, next) => {
 
 			setTimeout(() => {
 				const con = document.body;
+
+				// Stop PWA scrolling
+				document.body.style.position = "fixed";
+				window.addEventListener("scrool", (e) => {
+					e.preventDefault();
+					window.scrollTo(0, 0);
+				})
 			
 				con.addEventListener("touchstart", (e) => {
 					if (e.target && e.target.className && e.target.className.includes("map-container")) {
