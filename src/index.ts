@@ -131,8 +131,7 @@ koa.use(async(context, next) => {
 			let body = await file.async('text');
 			// Inject startup shim
 			const header = '<title>Screeps</title>';
-			body = body.replace(header, `<link href="manifest.json" rel="manifest">
-			<script>
+			body = body.replace(header, `<script>
 if (localStorage.backendDomain && localStorage.backendDomain !== ${JSON.stringify(info.backend)}) {
 	Object.keys(localStorage, key => delete localStorage[key]);
 }
@@ -174,7 +173,7 @@ addEventListener('message', event => {
 		}
 	});
 });
-			</script>` + header);
+			</script><link rel="manifest" href="manifest.json" />` + header);
 			// Remove tracking pixels
 			body = body.replace(/<script[^>]*>[^>]*xsolla[^>]*<\/script>/g, '<script>xnt = new Proxy(() => xnt, { get: () => xnt })</script>');
 			body = body.replace(/<script[^>]*>[^>]*facebook[^>]*<\/script>/g, '<script>fbq = new Proxy(() => fbq, { get: () => fbq })</script>');
@@ -291,6 +290,7 @@ koa.use(async(context, next) => {
 			} else if (info.endpoint.startsWith(`/manifest.json`)) {
 				context.respond = false;
 				context.res.setHeader(`Content-Type`, `application/json`);
+				context.res.statusCode = 200;
 				context.res.end(Manifest);
 				return;
 			} else if (info.endpoint.startsWith(`/icon.ico`)) {
