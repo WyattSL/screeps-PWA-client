@@ -132,6 +132,29 @@ koa.use(async(context, next) => {
 			// Inject startup shim
 			const header = '<title>Screeps</title>';
 			body = body.replace(header, `<script>
+
+			const con = document.getElementsByClassName("map-container")[0];
+
+			con.addEventListener(\`touchstart\`, (e) => {
+				e.preventDefault();
+			})
+			
+			con.addEventListener(\`touchdrag\`, (e) => {
+				e.preventDefault();
+			})
+			
+			con.addEventListener(\`touchend\`, (e) => {
+				e.preventDefault();
+			})
+			
+			con.addEventListener(\`touchcancel\`, (e) => {
+				e.preventDefault();
+			})
+			
+
+</script>
+
+<script>
 if (localStorage.backendDomain && localStorage.backendDomain !== ${JSON.stringify(info.backend)}) {
 	Object.keys(localStorage, key => delete localStorage[key]);
 }
@@ -238,9 +261,10 @@ addEventListener('message', event => {
 				}
 				if (new URL(info.backend).hostname !== 'screeps.com') {
 					// Replace official CDN with local assets
-					text = text.replace(/https:\/\/d3os7yery2usni\.cloudfront\.net\//g, `${argv.backend}/assets/`);
+					text = text.replace(/https:\/\/d3os7yery2usni\.cloudfront\.net\//g, `${info.backend}/assets/`);
 				}
 			}
+			text = text.replace(/http(s)?:\/\/ezra\.wyatt\.dom/g, `https://ezra.wyatt.world`);
 			return beautify ? jsBeautify(text) : text;
 
 		} else {
